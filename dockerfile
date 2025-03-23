@@ -1,11 +1,20 @@
-# Utiliser une image de base pour Java
-FROM openjdk:17-jdk-slim
+# Étape 1 : build Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Ajouter le fichier WAR généré dans le conteneur
-COPY target/projet-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/
+# Étape 2 : image avec WildFly
+FROM jboss/wildfly:latest
+# FROM quay.io/wildfly/wildfly:30.0.1.Final
+# FROM jboss/wildfly:27.0.1.Final
 
-# Exposer le port de l'application (par exemple, Tomcat utilise généralement 8080)
+
+# Copie du .war généré dans le répertoire de déploiement
+COPY --from=build /app/target/projet-1.0-SNAPSHOT.war /opt/jboss/wildfly/standalone/deployments/projet.war
+
+# Port HTTP
 EXPOSE 8080
 
-# Commande pour démarrer l'application
-CMD ["java", "-jar", "/usr/local/tomcat/webapps/projet-1.0-SNAPSHOT.war"]
+# Lancement WildFly
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]

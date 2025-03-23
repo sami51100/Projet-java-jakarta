@@ -117,7 +117,7 @@
                       String posterPath = movie.isNull("poster_path") ? "" : movie.getString("poster_path");
           %>
           <div class="col">
-              <a href="/projet-1.0-SNAPSHOT/moviedetails?id=<%= movie.getInt("id") %>"> <!-- Modification ici -->
+              <a href="/projet/moviedetails?id=<%= movie.getInt("id") %>"> <!-- Modification ici -->
                   <div class="card">
                       <% if (!posterPath.isEmpty()) { %>
                           <img src="https://image.tmdb.org/t/p/w500<%= posterPath %>" class="card-img-top" alt="<%= movie.getString("title") %>">
