@@ -6,9 +6,6 @@ RUN mvn clean package -DskipTests
 
 # Étape 2 : image avec WildFly
 FROM jboss/wildfly:latest
-# FROM quay.io/wildfly/wildfly:30.0.1.Final
-# FROM jboss/wildfly:27.0.1.Final
-
 
 # Copie du .war généré dans le répertoire de déploiement
 COPY --from=build /app/target/projet-1.0-SNAPSHOT.war /opt/jboss/wildfly/standalone/deployments/projet.war
